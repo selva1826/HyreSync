@@ -16,14 +16,42 @@ const PORT = process.env.PORT || 5000;
 
 
 // 1. CORS - MUST BE FIRST!
+// 1. CORS - MUST BE FIRST!
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://hyresync.onrender.com',
+  'https://hyre-sync-pro.vercel.app',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL  // Production: Vercel URL
-    : 'http://localhost:5173',   // Development: Local
+  origin: function (origin, callback) {
+    // Allow requests with no origin (Postman, mobile apps)
+    if (!origin) return callback(null, true);
+    
+    // Allow all Vercel deployments (including preview deployments)
+    if (origin && origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    // Allow specific origins
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    console.log('⚠️ CORS blocked origin:', origin);
+    callback(null, false);
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Authorization']
 }));
+
+// Add preflight OPTIONS handler
+app.options('*', cors());
+
 
 
 // 2. Request logging
