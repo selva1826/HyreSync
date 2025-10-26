@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import routes from './routes/index.js';
 import botMimicWorker from './services/botMimicWorker.js';
+import { swaggerSpec, swaggerUi } from './swagger.js';
+
 
 dotenv.config();
 
@@ -75,6 +77,13 @@ app.use((req, res, next) => {
   }
   express.urlencoded({ extended: true, limit: '10mb' })(req, res, next);
 });
+
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Hybrid ATS API Docs'
+}));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ROUTES - Multer middleware is applied here

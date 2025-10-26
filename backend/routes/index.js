@@ -5,6 +5,42 @@ import * as ctrl from '../controllers/controllers.js';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login to the system
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: admin@hybridats.com
+ *               password:
+ *                 type: string
+ *                 example: Admin@12345
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ */
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 🔐 AUTH ROUTES (PUBLIC)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
