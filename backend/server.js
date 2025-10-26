@@ -14,13 +14,17 @@ const PORT = process.env.PORT || 5000;
 // MIDDLEWARE - ORDER MATTERS!
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
 // 1. CORS - MUST BE FIRST!
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL  // Production: Vercel URL
+    : 'http://localhost:5173',   // Development: Local
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // 2. Request logging
 app.use((req, res, next) => {
